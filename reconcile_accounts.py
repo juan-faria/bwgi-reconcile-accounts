@@ -27,12 +27,8 @@ class reconcile_accounts(object):
 
     #recovering order of second list (doing this to avoid N+1 ordering over second list of transactions inside the loop)
     transactions2 = sorted(sorted_transactions2, key=lambda index: index[0])
-
-    #remove indexes
-    for transaction in transactions1: del transaction[0]    
-    for transaction in transactions2: del transaction[0]
     
-    return (self._add_remaining_missings(transactions1), self._add_remaining_missings(transactions2))
+    return (self._clear_transaction_response(transactions1), self._clear_transaction_response(transactions2))
 
 
   def _valid_transaction_date_delta(self, transaction):
@@ -41,8 +37,9 @@ class reconcile_accounts(object):
     return transation_date_delta
 
 
-  def _add_remaining_missings(self, transactions):
+  def _clear_transaction_response(self, transactions):
     for transaction in transactions:
+      del transaction[0]
       if len(transaction) == 4:
         transaction.append('MISSING')
     return transactions
